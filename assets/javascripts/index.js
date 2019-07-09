@@ -25,7 +25,7 @@ $(document).ready(function(){
     $(document).trigger('button-trigger', $(this).text());
   })
 
-  //render buttons for the first time
+  // render buttons for the first time
   $(document).trigger('update-buttons', [buttons]);
 });
 
@@ -67,7 +67,7 @@ function renderButtons(event, buttons){
   $('#button-area').empty();
   // append buttons to the button area
   $.each(buttons, function(index, button){
-    $('#button-area').append(`<div class="col-sm-2"><button class="btn btn-secondary btn-lg btn-block custom-button">${button}</button></div>`);
+    $('#button-area').append(`<div class="col-sm-2"><button class="btn btn-secondary btn-lg btn-block custom-button mt-1">${button}</button></div>`);
   });
 }
 
