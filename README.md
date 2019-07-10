@@ -15,4 +15,5 @@ A gif finder for Giphy
 
 ## What I learned
 
-Nothing yet :-)
+- Jquery Custom events
+- Ajax with Giphy

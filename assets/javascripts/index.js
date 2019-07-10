@@ -1,8 +1,18 @@
+/*
+  Home Work 6 - Giftastic
+
+  Things I learned 
+
+  - Jquery custom events
+  - Passing arrays through the trigger event destructures them
+  - I understand how $(this) works in Jquery now 
+  
+*/
 $(document).ready(function(){
   // create array for buttons
   const buttons = ["arm bird", "crazy", "WTF"];
   // function that subscribes custom events to document
-  documentSubscribe();
+  documentSubscribe(document);
   
   // handle adding new button to buttons array 
   $('#new-button').on('click', function(e){
@@ -10,6 +20,8 @@ $(document).ready(function(){
     if($('#new-button-text').val() !== ""){
       // add text from input into button array
       buttons.push($('#new-button-text').val());
+      // reset text in input feild
+      $('#new-button-text').val("")
       // let the dom know the buttons were changes
       $(document).trigger('update-buttons', [buttons]);
     }
@@ -30,12 +42,12 @@ $(document).ready(function(){
 });
 
 
-function documentSubscribe(){
+function documentSubscribe(el){
   // adds custom events to DOM
-  $(document).on('update-buttons', renderButtons);
-  $(document).on('update-images', updateImages);
-  $(document).on('button-trigger', search);
-  $(document).on('gif-click', handleGifClick);
+  $(el).on('update-buttons', renderButtons);
+  $(el).on('update-images', updateImages);
+  $(el).on('button-trigger', search);
+  $(el).on('gif-click', handleGifClick);
 }
 
 function search(event, thingToSearchFor){
