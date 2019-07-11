@@ -6,14 +6,14 @@
   - Jquery custom events
   - Passing arrays through the trigger event destructures them
   - I understand how $(this) works in Jquery now 
-  
+  - Bootstrap ordering
+
 */
 $(document).ready(function(){
   // create array for buttons
   const buttons = ["arm bird", "crazy", "WTF"];
   // function that subscribes custom events to document
   documentSubscribe(document);
-  
   // handle adding new button to buttons array 
   $('#new-button').on('click', function(e){
     e.preventDefault();
@@ -29,11 +29,13 @@ $(document).ready(function(){
   
   // trigger event when gif is clicked on
   $(document).on('click', '.gifs', function(e){
+      e.preventDefault();
       $(document).trigger('gif-click', $(this));
   })
 
   // trigger event when the buttons are clicked on
-  $(document).on('click', '.custom-button', function(event){
+  $(document).on('click', '.custom-button', function(e){
+    e.preventDefault();
     $(document).trigger('button-trigger', $(this).text());
   })
 
