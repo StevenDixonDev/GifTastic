@@ -57,6 +57,7 @@ function search(event, thingToSearchFor){
     method: 'get'
   }).then((res)=>{
     // tell the dom the data has been found
+    console.log(res)
     $(document).trigger('update-images', res);
   });
 }
@@ -68,7 +69,7 @@ function updateImages(event, data){
   $.each(data.data, function(index, gif){
     $('#gif-location').append(`
     <div class="col-sm-3 mt-1">
-      <img class="gifs img-fluid m-0 p-0" data-gif-src="${gif.images['downsized'].url}" src="${gif.images['downsized_still'].url}"/>
+      <img class="gifs img-fluid m-0 p-0" data-gif-src="${gif.images['fixed_width'].url}" src="${gif.images['fixed_width_still'].url}"/>
     </div>
     `)
   })
@@ -79,7 +80,7 @@ function renderButtons(event, buttons){
   $('#button-area').empty();
   // append buttons to the button area
   $.each(buttons, function(index, button){
-    $('#button-area').append(`<div class="col-sm-2"><button class="btn btn-secondary btn-lg btn-block custom-button mt-1">${button}</button></div>`);
+    $('#button-area').append(`<button class="btn btn-secondary btn-lg btn-block custom-button">${button}</button>`);
   });
 }
 

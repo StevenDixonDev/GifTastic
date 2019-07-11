@@ -1,27 +1,43 @@
 <!DOCTYPE html>
-<html lang="en" class="w-100 m-0 p-0">
+<html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Giftastic</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
+
 <body class="container-fluid">
   <nav class="navbar navbar-dark bg-dark">
-      <h2 class="navbar-brand">Giftastic GIF finder</h2>
-      <form class="form-inline my-2 my-lg-0">
+    <h2 class="navbar-brand">Giftastic GIF finder</h2>
+    <form class="form-inline my-2 my-lg-0">
       <input id="new-button-text" class="form-control mr-sm-2" type="search" placeholder="Topic" aria-label="Search">
       <button id="new-button" class="btn btn-outline-success my-2 my-sm-0" type="submit">Add a Topic</button>
     </form>
   </nav>
-  <section id="button-area" class="row m-1">
+  <div class="row">
+    <div class="col-sm-12 col-md-10 order-sm-2 order-md-1">
+      <section id="gif-location" class="row row-wrap"></section>
+    </div>
 
-  </section>
-  <section id="gif-location" class="row row-wrap"></section>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<script src="./assets/javascripts/index.js"></script>
+    <div class="col-sm-12 col-md-2 order-sm-1 order-md-2">
+      <section id="button-area" class="row m-1 d-flex flex-column">
+
+      </section>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script src="./assets/javascripts/index.js"></script>
 </body>
+
 </html>
