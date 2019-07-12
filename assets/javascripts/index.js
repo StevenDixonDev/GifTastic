@@ -10,6 +10,7 @@
 
 */
 $(document).ready(function(){
+
   // create array for buttons
   const buttons = ["arm bird", "crazy", "WTF"];
   // function that subscribes custom events to document
@@ -21,12 +22,17 @@ $(document).ready(function(){
       // add text from input into button array
       buttons.push($('#new-button-text').val());
       // reset text in input feild
-      $('#new-button-text').val("")
+      $('#new-button-text').val("");
       // let the dom know the buttons were changes
       $(document).trigger('update-buttons', [buttons]);
     }
   });
-  
+
+  $('#size-button').on('click', function(e){
+    e.preventDefault();
+    $(document).trigger('change-size');
+  })
+
   // trigger event when gif is clicked on
   $(document).on('click', '.gifs', function(e){
       e.preventDefault();
@@ -41,6 +47,7 @@ $(document).ready(function(){
 
   // render buttons for the first time
   $(document).trigger('update-buttons', [buttons]);
+  $("#size-button").text($("#size-button").data('size'))
 });
 
 
@@ -50,6 +57,22 @@ function documentSubscribe(el){
   $(el).on('update-images', updateImages);
   $(el).on('button-trigger', search);
   $(el).on('gif-click', handleGifClick);
+  $(el).on('change-size', changeImageSize);
+}
+
+function changeImageSize(event, data){
+  const sizes = ["fixed_width", "fixed_height", "downsized", "original"];
+  let currentSize = $("#size-button").data('size');
+  let index = sizes.indexOf(currentSize);
+
+  index+=1;
+
+  if(index >= sizes.length){
+    index = 0;
+  }
+
+  $("#size-button").data('size', sizes[index]);
+  $("#size-button").text(sizes[index]);
 }
 
 function search(event, thingToSearchFor){
@@ -67,12 +90,11 @@ function search(event, thingToSearchFor){
 function updateImages(event, data){
   // clear the images from the dom
   $('#gif-location').empty();
+  let currentSize = $("#size-button").data('size');
   // add new images
   $.each(data.data, function(index, gif){
     $('#gif-location').append(`
-    <div class="col-sm-3 mt-1">
-      <img class="gifs img-fluid m-0 p-0" data-gif-src="${gif.images['fixed_width'].url}" src="${gif.images['fixed_width_still'].url}"/>
-    </div>
+      <img class="gifs  m-1 p-1" data-gif-src="${gif.images[currentSize].url}" src="${gif.images[currentSize+'_still'].url}"/>
     `)
   })
 }
