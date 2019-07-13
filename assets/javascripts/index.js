@@ -3,11 +3,12 @@
 
   Things I learned 
 
-  - Jquery custom events
-  - Passing arrays through the trigger event destructures them
+  - Jquery custom events (Trigger, on)
+  - Passing arrays through the trigger event destructures them, all arguments have to be passed an array
   - I understand how $(this) works in Jquery now 
   - Bootstrap ordering
   - Local storage to keep the previous topics on the page
+
 */
 
 $(document).ready(function () {
@@ -15,7 +16,7 @@ $(document).ready(function () {
   let buttons = [];
   // create a place holder for the last searched item
   let lastSearch = "";
-  // set the limit for images returned
+  // set the limit for gifs returned
   let limit = 10;
   // get previous buttons from local storage
   let previousButtons = localStorage.getItem("buttons");
@@ -79,6 +80,7 @@ $(document).ready(function () {
 
   // render buttons for the first time
   $(document).trigger('update-buttons', [buttons]);
+  // set the correct text on the size button
   $("#size-button").text($("#size-button").data('size'));
 });
 
@@ -151,7 +153,13 @@ function updateImages(event, data) {
   // add new images
   $.each(data, function (index, gif) {
     $('#gif-location').append(`
-      <img class="gifs  m-1 p-1" data-gif-src="${gif.images[currentSize].url}" src="${gif.images[currentSize + '_still'].url}"/>
+      <img 
+      class="gifs m-1 p-1" 
+      role="button" 
+      data-gif-src="${gif.images[currentSize].url}" 
+      src="${gif.images[currentSize + '_still'].url}"
+      style="cursor:pointer;"
+      />
     `)
   })
 }
@@ -162,9 +170,12 @@ function renderButtons(event, buttons) {
   // append buttons to the button area
   $.each(buttons, function (index, button) {
     $('#button-area').append(`
-    <div class="btn btn-outline-info btn-block custom-button d-flex flex-row justify-content-between" >
+    <div 
+    class="btn btn-outline-primary btn-block custom-button d-flex justify-content-between align-items-center"
+    style="cursor:pointer;"
+    >
     <p>${button}</p>
-    <button class="btn btn-sm btn-danger custom-button-removal" data-button-id="${index}">X</button>
+    <button class="btn btn-danger custom-button-removal" data-button-id="${index}">X</button>
     </div>`
     );
   });
