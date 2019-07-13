@@ -7,13 +7,16 @@
   - Passing arrays through the trigger event destructures them
   - I understand how $(this) works in Jquery now 
   - Bootstrap ordering
+  - Local storage to keep the previous topics on the page
 */
-
-
 
 $(document).ready(function () {
   // create array for buttons
   let buttons = [];
+  // create a place holder for the last searched item
+  let lastSearch = "";
+  // set the limit for images returned
+  let limit = 10;
   // get previous buttons from local storage
   let previousButtons = localStorage.getItem("buttons");
   // check if there were any previous buttons
@@ -28,41 +31,53 @@ $(document).ready(function () {
   // handle adding new button to buttons array 
   $('#new-button').on('click', function (e) {
     e.preventDefault();
+    // trigger the add button event to handle making new buttons
     $(document).trigger('add-button', [buttons]);
   });
 
   // trigger size change
   $('#size-button').on('click', function (e) {
     e.preventDefault();
+    // trigger the change size event to change the size of the next loaded gifs
     $(document).trigger('change-size');
   })
 
   // trigger event when gif is clicked on
   $(document).on('click', '.gifs', function (e) {
     e.preventDefault();
+    // trigger gif click to change gif state from still to animated
     $(document).trigger('gif-click', $(this));
   })
 
   // trigger event when the buttons are clicked on
   $(document).on('click', '.custom-button', function (e) {
     e.preventDefault();
-    $(document).trigger('button-trigger', $(this));
+    // trigger the search event
+    $(document).trigger('button-trigger', [$(this), limit]);
   })
 
   $(document).on('click', '.custom-button-removal', function (e) {
     e.preventDefault();
     // since this is inside of a parent with an event listener need to stop the parent from triggering
     e.stopPropagation();
+    // trigger event to remove button from dom and buttons array
     $(document).trigger('remove-button', [$(this), buttons]);
   });
+
+  $(document).on('click', '#more', function (e) {
+    e.preventDefault();
+    // trigger next page event to update dom and search
+    $(document).trigger('next-page', [lastSearch, limit]);
+  })
 
   // functions that change buttons will need to be addressed here
   $(document).on('remove-button', function (e, button, buttons) { buttons = removeButton(e, button, buttons) });
   $(document).on('add-button', function (e, buttons) { buttons = addButtons(e, buttons) });
+  $(document).on('button-trigger', function (e, element, limit) { lastSearch = search(e, element, limit) });
   // function that subscribes custom events to document for events that don't change the buttons
   documentSubscribe(document);
 
-    // render buttons for the first time
+  // render buttons for the first time
   $(document).trigger('update-buttons', [buttons]);
   $("#size-button").text($("#size-button").data('size'));
 });
@@ -72,9 +87,10 @@ function documentSubscribe(el) {
   // adds custom events to DOM
   $(el).on('update-buttons', renderButtons);
   $(el).on('update-images', updateImages);
-  $(el).on('button-trigger', search);
   $(el).on('gif-click', handleGifClick);
   $(el).on('change-size', changeImageSize);
+  $(el).on('render-next', renderNextAndPrevious);
+  $(el).on('next-page', moveToNextPage);
 }
 
 function addButtons(e, buttons) {
@@ -92,8 +108,11 @@ function addButtons(e, buttons) {
 }
 
 function changeImageSize(event, data) {
+  // define list of sizes a button can be 
   const sizes = ["fixed_width", "fixed_height", "downsized", "original"];
+  // get the current size from data attr
   let currentSize = $("#size-button").data('size');
+  // get current index in sizes list
   let index = sizes.indexOf(currentSize);
   // increase the index
   index += 1;
@@ -106,16 +125,23 @@ function changeImageSize(event, data) {
   $("#size-button").text(sizes[index]);
 }
 
-function search(event, element) {
+function search(event, element, limit) {
+  let offset = 0;
   let thingToSearchFor = $(element).find("p").text();
   // ajax request to giphy for gifs
-  $.ajax({
-    url: `https://api.giphy.com/v1/gifs/search?q=${thingToSearchFor}&limit=10&rating=pg&api_key=CcLtxrF0OzF1nH4I4jlUfsOp4TBYkmpT`,
-    method: 'get'
-  }).then((res) => {
+  giphyCall(limit, offset, thingToSearchFor).then((res) => {
     // tell the dom the data has been found
-    $(document).trigger('update-images', res);
+    $(document).trigger('update-images', [res.data]);
+    $(document).trigger('render-next', res.pagination);
   });
+  return thingToSearchFor;
+}
+
+function giphyCall(limit, offset, term) {
+  return $.ajax({
+    url: `https://api.giphy.com/v1/gifs/search?q=${term}&limit=${limit}&rating=pg&offset=${offset}&api_key=CcLtxrF0OzF1nH4I4jlUfsOp4TBYkmpT`,
+    method: 'get'
+  })
 }
 
 function updateImages(event, data) {
@@ -123,7 +149,7 @@ function updateImages(event, data) {
   $('#gif-location').empty();
   let currentSize = $("#size-button").data('size');
   // add new images
-  $.each(data.data, function (index, gif) {
+  $.each(data, function (index, gif) {
     $('#gif-location').append(`
       <img class="gifs  m-1 p-1" data-gif-src="${gif.images[currentSize].url}" src="${gif.images[currentSize + '_still'].url}"/>
     `)
@@ -165,4 +191,20 @@ function handleGifClick(event, element) {
 function updateLocalStorage(buttons) {
   localStorage.clear();
   localStorage.setItem('buttons', JSON.stringify(buttons));
+}
+
+function renderNextAndPrevious(event, page) {
+  $("#gif-location").append(`
+    <button class="btn btn-outline-primary btn-lg btn-block" id="more" data-page=${page.offset}>More</button> 
+  `)
+}
+
+function moveToNextPage(e, lastSearch, limit) {
+  let page = $("#more").data().page;
+  page += limit;
+  giphyCall(limit, page, lastSearch).then((res) => {
+    // tell the dom the data has been found
+    $(document).trigger('update-images', [res.data]);
+    $(document).trigger('render-next', res.pagination);
+  });
 }
