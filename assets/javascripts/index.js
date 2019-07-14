@@ -8,7 +8,8 @@
   - I understand how $(this) works in Jquery now 
   - Bootstrap ordering
   - Local storage to keep the previous topics on the page
-
+  - bootstrap forms where more than one button is present must have a button type attributes to defualt on enter to submit
+  
 */
 
 $(document).ready(function () {
