@@ -17,3 +17,7 @@ A gif finder for Giphy
 
 - Jquery Custom events
 - Ajax with Giphy
+
+## What I want to implement
+
+- Voice recognition in chrome
